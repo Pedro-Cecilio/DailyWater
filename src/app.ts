@@ -1,7 +1,7 @@
 import fastity from 'fastify'
-import { test } from './routes/testRouter'
+import { User } from './routes/userRoutes'
 
 
 export const app = fastity()
 
-app.register(test)
+app.register(User)
