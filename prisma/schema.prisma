@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  name     String
+  password String
+  weight   Float
+  wake     String
+  sleep    String
+
+  dailyWater    DailyWater?
+  ingestedWater IngestedWater[]
+}
+
+model DailyWater {
+  id            Int   @id @default(autoincrement())
+  user          User  @relation(fields: [user_id], references: [id])
+  user_id       Int   @unique
+  dailyWater_ml Float
+}
+
+model IngestedWater {
+  id               Int    @id @default(autoincrement())
+  user             User   @relation(fields: [user_id], references: [id])
+  user_id          Int
+  ingestedWater_ml Float
+  day              String
+}
