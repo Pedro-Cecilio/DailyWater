@@ -1,8 +1,5 @@
 import { prisma } from "../database/database";
 import moment from "moment";
-import {Prisma} from '@prisma/client'
-
-
 export class UpdateIngestedWaterRepository{
     async get(user_id:string):Promise<any>{
         const ingestedWater = await prisma.ingestedWater.findFirst({

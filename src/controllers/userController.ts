@@ -92,17 +92,14 @@ export async function updateIngestedWater(request: FastifyRequest, reply: Fastif
         try {
             const ingestedWater = await updateIngestedWater.get(decodedToken.userId)
 
-            const oldMl = ingestedWater.ingestedWater_ml + Number(ml)
+            const newMl = ingestedWater.ingestedWater_ml + Number(ml)
 
-            const updateIngestedWaterResult = await updateIngestedWater.update(decodedToken.userId, Number(oldMl))
-
-            reply.send(updateIngestedWaterResult)
-
+           await updateIngestedWater.update(decodedToken.userId, Number(newMl))
         } catch (error) {
-            reply.send(error)
+            reply.status(444).send(error)
         }
     }
-    reply.send()
+    reply.status(204).send()
 }
 export async function getIngestedWater(request: FastifyRequest, reply: FastifyReply){
     const token = request.headers.authorization?.split(' ')[1] as string
