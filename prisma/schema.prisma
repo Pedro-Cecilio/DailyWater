@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       String @id @default(uuid())
   email    String @unique
   name     String
   password String
@@ -24,16 +24,17 @@ model User {
 }
 
 model DailyWater {
-  id            Int   @id @default(autoincrement())
-  user          User  @relation(fields: [user_id], references: [id])
-  user_id       Int   @unique
+  id            String @id @default(uuid())
+  user          User   @relation(fields: [user_id], references: [id])
+  user_id       String @unique
   dailyWater_ml Float
 }
 
 model IngestedWater {
-  id               Int    @id @default(autoincrement())
+  id               String @id @default(uuid())
   user             User   @relation(fields: [user_id], references: [id])
-  user_id          Int
-  ingestedWater_ml Float
+  user_id          String
+  waterPerHour     Float
+  ingestedWater_ml Float?
   day              String
 }
