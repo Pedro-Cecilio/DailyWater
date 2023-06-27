@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { z } from 'zod'
+import { number, z } from 'zod'
 import { generateJwt } from '../utils/generatejwt'
 import { CreateUserRepository } from '../repositories/CreateUserRepository'
 import { CreateDailyWaterRepository } from '../repositories/CreateDailyWaterRepository'
@@ -10,6 +10,7 @@ import {generateMlPerHour} from '../utils/generateMlPerHour'
 import moment from 'moment'
 import { jwtValidate } from '../utils/jwtValidate'
 import { prisma } from '../database/database'
+import { UpdateIngestedWaterRepository } from '../repositories/UpdateIngestedWater'
 
 export async function createUser(request: FastifyRequest, reply: FastifyReply) {
     const createUserSchema = z.object({
@@ -32,6 +33,8 @@ export async function createUser(request: FastifyRequest, reply: FastifyReply) {
         const createIngestedWaterRepository = new CreateIngestedWaterRepository()
 
         const user = await createUserRepository.CreateUser(email, name, password, sleep, wake, weight)
+        // return reply.send({email, name, password, sleep, wake, weight})
+
         const dataDailyWater = { userId: user.userId, dailyWater_ml: weight * 35 }
         await createDailyWaterRepository.createDailyWater(dataDailyWater)
         const diferenceInHours = generateDiferenceHours(wake, sleep)
@@ -77,36 +80,27 @@ export async function login(request: FastifyRequest, reply: FastifyReply) {
     }
 }
 export async function updateIngestedWater(request: FastifyRequest, reply: FastifyReply) {
+
     const token = request.headers.authorization?.split(' ')[1] as string
     const decodedToken = jwtValidate(token)
-    if(decodedToken.userid){
+
+    if(decodedToken.userId){
+        console.log({ml:'teste'})
         const {ml}:{ml:string}= request.query as any
-        if(ml){
-            const ingestedWaterRegister = await prisma.ingestedWater.findFirst({
-                where:{
-                    user_id: decodedToken.userid,
-                    day: moment().format('DD-MM-YYYY')
-                }
-            })
-            if(ingestedWaterRegister){
-                const result = await prisma.ingestedWater.update({
-                    where:{
-                        id: ingestedWaterRegister?.id 
-                    },
-                    data:{
-                        ingestedWater_ml:{
-                            increment: Number(ml)
-                        }
-                    }
-                })
-                if(result){
-                    return reply.status(200).send()
-                }
-            }
-            return reply.status(404).send
+        const updateIngestedWater = new UpdateIngestedWaterRepository()
+
+        try {
+            const ingestedWater = await updateIngestedWater.get(decodedToken.userId)
+
+            const oldMl = ingestedWater.ingestedWater_ml + Number(ml)
+
+            const updateIngestedWaterResult = await updateIngestedWater.update(decodedToken.userId, Number(oldMl))
+
+            reply.send(updateIngestedWaterResult)
+
+        } catch (error) {
+            reply.send(error)
         }
-        
-        
     }
     reply.send()
 }
@@ -120,7 +114,7 @@ export async function getIngestedWater(request: FastifyRequest, reply: FastifyRe
                 day: moment().format('DD-MM-YYYY')
             }
         })
-            
+
         return reply.status(200).send({ingestedWater_ml: ingestedWater?.ingestedWater_ml})
     }
 }

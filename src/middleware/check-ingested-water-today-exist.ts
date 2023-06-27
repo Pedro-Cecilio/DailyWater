@@ -21,15 +21,16 @@ export async function CheckIngestedWaterTodayExist(request: FastifyRequest, repl
                 id: decodedToken.userid,
             }
         })
+
         if(user){
             const diferenceInHours = generateDiferenceHours(user.wake, user.sleep)
             const MlPerHour = generateMlPerHour(user.weight * 35, diferenceInHours)
             const createIngestedWaterRepository = new CreateIngestedWaterRepository()
             await createIngestedWaterRepository.createIngestedWater(user.id, MlPerHour, moment().format('DD-MM-YYYY'), 0)
         }else{
-            return reply.status(404).send("User not found") 
+            return reply.status(404).send("User not found")
         }
     }
     next()
-   
+
 }
