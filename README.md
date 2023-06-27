@@ -1,8 +1,8 @@
 # Requisitos Funcionais
 
-- [ ] Deve ser possível se registrar 
-- [ ] Deve ser possível autenticar o usuário
-- [ ] Deve ser possível calcular a quantidade de água para o usuário no dia
+- [ x ] Deve ser possível se registrar 
+- [ x ] Deve ser possível autenticar o usuário
+- [ x ] Deve ser possível calcular a quantidade de água para o usuário no dia
 - [ ] Deve ser possível vizualizar a agenda de água
 - [ ] Deve ser possível confirmar ou recusar a beber água em determinado horário
 - [ ] Deve ser possível vizualizar a quantidade de água bebida até o momento e a quantidade restante
