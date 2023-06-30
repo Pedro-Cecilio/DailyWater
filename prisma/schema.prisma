@@ -21,6 +21,7 @@ model User {
 
   dailyWater    DailyWater?
   ingestedWater IngestedWater[]
+  tokenValidity  TokenValidity[]
 }
 
 model DailyWater {
@@ -37,4 +38,12 @@ model IngestedWater {
   waterPerHour     Float
   ingestedWater_ml Float?
   day              String
+}
+
+model TokenValidity {
+  id  String @id @default(uuid())
+  user  User @relation(fields: [user_id], references: [id])
+  user_id String
+  token   String @unique
+  isValid Boolean
 }

@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import { prisma } from "../database/database"
-import { jwtValidate } from "../utils/jwtValidate"
+import { jwtDecoded } from "../utils/jwtDecoded"
 import moment from "moment"
 import { generateDiferenceHours } from "../utils/generateDiferenceHours"
 import { generateMlPerHour } from "../utils/generateMlPerHour"
@@ -8,7 +8,7 @@ import { CreateIngestedWaterRepository } from "../repositories/CreateIngestedWat
 
 export async function CheckIngestedWaterTodayExist(request: FastifyRequest, reply: FastifyReply, next: ()=> void){
     const token = request.headers.authorization?.split(' ')[1] as string
-    const decodedToken = jwtValidate(token)
+    const decodedToken = jwtDecoded(token)
     const ingestedWater = await prisma.ingestedWater.findFirst({
         where:{
             user_id: decodedToken.userid,

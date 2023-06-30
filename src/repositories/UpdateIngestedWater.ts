@@ -11,13 +11,13 @@ export class UpdateIngestedWaterRepository{
 
         return ingestedWater
     }
-    async update(id:string,oldMl:number):Promise<any>{
+    async update(id:string,newMl:number):Promise<any>{
        const updateIngestedWater =  await prisma.ingestedWater.update({
             where:{
-                id:"16114f7e-04bf-4734-a278-120d2b2be706"
+                id: id
             },
             data:{
-                ingestedWater_ml:oldMl
+                ingestedWater_ml: newMl
             }
         })
         return updateIngestedWater
