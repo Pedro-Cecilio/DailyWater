@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE `User` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
@@ -14,8 +14,8 @@ CREATE TABLE `User` (
 
 -- CreateTable
 CREATE TABLE `DailyWater` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `user_id` INTEGER NOT NULL,
+    `id` VARCHAR(191) NOT NULL,
+    `user_id` VARCHAR(191) NOT NULL,
     `dailyWater_ml` DOUBLE NOT NULL,
 
     UNIQUE INDEX `DailyWater_user_id_key`(`user_id`),
@@ -24,9 +24,10 @@ CREATE TABLE `DailyWater` (
 
 -- CreateTable
 CREATE TABLE `IngestedWater` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `user_id` INTEGER NOT NULL,
-    `ingestedWater_ml` DOUBLE NOT NULL,
+    `id` VARCHAR(191) NOT NULL,
+    `user_id` VARCHAR(191) NOT NULL,
+    `waterPerHour` DOUBLE NOT NULL,
+    `ingestedWater_ml` DOUBLE NULL,
     `day` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`id`)
